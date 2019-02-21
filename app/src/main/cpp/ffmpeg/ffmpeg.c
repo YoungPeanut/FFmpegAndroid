@@ -367,6 +367,9 @@ void term_init(void)
 {
 #if HAVE_TERMIOS_H
     if(!run_as_daemon){
+
+        // https://linux.die.net/man/3/termios
+        // get and set terminal attributes, line control, get and set baud rate
         struct termios tty;
         if (tcgetattr (0, &tty) == 0) {
             oldtty = tty;
@@ -4273,6 +4276,12 @@ static void log_callback_null(void *ptr, int level, const char *fmt, va_list vl)
 {
 }
 
+/**
+ * 执行ffmpeg命令行
+ * @param argc  数组长度
+ * @param argv  命令行数组
+ * @return
+ */
 int run(int argc, char **argv)
 {
     int ret;
@@ -4285,6 +4294,7 @@ int run(int argc, char **argv)
     av_log_set_flags(AV_LOG_SKIP_REPEATED);
     parse_loglevel(argc, argv, options);
 
+    // 对比字符串，0为一样
     if(argc>1 && !strcmp(argv[1], "-d")){
         run_as_daemon=1;
         av_log_set_callback(log_callback_null);
@@ -4302,13 +4312,15 @@ int run(int argc, char **argv)
 
     show_banner(argc, argv, options);
 
+    // terminal 初始化
     term_init();
 
-    /* parse options and open all input/output files */
+    /* 处理命令  parse options and open all input/output files */
     ret = ffmpeg_parse_options(argc, argv);
     if (ret < 0)
         exit_program(1);
 
+    // 命令有问题
     if (nb_output_files <= 0 && nb_input_files == 0) {
         show_usage();
         av_log(NULL, AV_LOG_WARNING, "Use -h to get full help or, even better, run 'man %s'\n", program_name);
@@ -4320,6 +4332,7 @@ int run(int argc, char **argv)
         av_log(NULL, AV_LOG_FATAL, "At least one output file must be specified\n");
         exit_program(1);
     }
+    // 命令有问题 end
 
     current_time = ti = getutime();
     if (transcode() < 0)

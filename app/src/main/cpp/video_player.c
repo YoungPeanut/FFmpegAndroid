@@ -118,7 +118,7 @@ JNIEXPORT jint JNICALL Java_com_frank_ffmpeg_VideoPlayer_play
             if (frameFinished) {
                 // lock native window
                 ANativeWindow_lock(nativeWindow, &windowBuffer, 0);
-                // 格式转换
+                // 格式转换   sws_ctx 指定了 AV_PIX_FMT_RGBA
                 sws_scale(sws_ctx, (uint8_t const * const *)pFrame->data,
                           pFrame->linesize, 0, pCodecCtx->height,
                           pFrameRGBA->data, pFrameRGBA->linesize);

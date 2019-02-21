@@ -1121,6 +1121,7 @@ static void print_buildconf(int flags, int level)
     }
 }
 
+// 打印多媒体数据信息
 void show_banner(int argc, char **argv, const OptionDef *options)
 {
     int idx = locate_option(argc, argv, options, "version");

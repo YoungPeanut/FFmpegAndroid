@@ -209,7 +209,7 @@ public class FFmpegUtil {
     @SuppressLint("DefaultLocale")
     public static  String[] pictureToVideo(String srcFile, String targetFile){
         //-f image2：代表使用image2格式，需要放在输入文件前面
-        String combineVideo = "ffmpeg -f image2 -r 1 -i %simg#d.jpg -vcodec mpeg4 %s";
+        String combineVideo = "ffmpeg -f image2 -r 1 -i %s img#d.jpg -vcodec mpeg4 %s";
         combineVideo = String.format(combineVideo, srcFile, targetFile);
         combineVideo = combineVideo.replace("#", "%");
         Log.i("VideoHandleActivity", "combineVideo=" + combineVideo);

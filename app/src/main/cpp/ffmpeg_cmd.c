@@ -4,6 +4,8 @@
 JNIEXPORT jint JNICALL Java_com_frank_ffmpeg_FFmpegCmd_handle
 (JNIEnv *env, jclass obj, jobjectArray commands){
     int argc = (*env)->GetArrayLength(env, commands);
+
+    // 对应那个命令行 字符串数组
     char **argv = (char**)malloc(argc * sizeof(char*));
     int i;
     int result;
@@ -14,7 +16,7 @@ JNIEXPORT jint JNICALL Java_com_frank_ffmpeg_FFmpegCmd_handle
         strcpy(argv[i], temp);
         (*env)->ReleaseStringUTFChars(env, jstr, temp);
     }
-    //执行ffmpeg命令
+    //执行ffmpeg命令，  argv就是命令行数组
     result =  run(argc, argv);
     //释放内存
     for (i = 0; i < argc; i++) {
